@@ -8,150 +8,110 @@
 <style>
 @font-face { font-family: "Archivo"; src: url("fonts/archivo.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
 :root {
-  --bg: #0B0D12; --kart2: rgba(255,255,255,0.085); --cizgi: rgba(255,255,255,0.16);
-  --yazi: #FFFFFF; --soluk: rgba(255,255,255,0.72); --soluk2: rgba(255,255,255,0.5);
+  --bg: #0B0D12; --cizgi: rgba(255,255,255,0.20);
+  --yazi: #FFFFFF; --soluk: rgba(255,255,255,0.80); --soluk2: rgba(255,255,255,0.60);
   --viator: #45C9AF; --gyg: #E0564A; --direkt: #6FB2EE;
-  --kehribar: #E0A63E; --iyi: #7CC77A; --vurgu: #F2C14E;
+  --kehribar: #F0B347; --iyi: #8FE38C; --vurgu: #F2C14E; --kotu: #FF9A8F;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; background: var(--bg); overflow: hidden; }
 body { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; color: var(--yazi); -webkit-font-smoothing: antialiased; }
 #sahne { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; }
-#arka { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #14121A; }
+#arka { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #14121A linear-gradient(160deg, #1B2238 0%, #3A2C48 45%, #6B3F3A 100%); }
 .foto { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background-position: center; background-size: cover; background-repeat: no-repeat; opacity: 0; transition: opacity 2.4s ease-in-out; }
 .foto.acik { opacity: 1; }
-#golge { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #06080E; opacity: 0.3; transition: opacity 2.4s ease-in-out; }
-#ustgolge { position: absolute; left: 0; top: 0; width: 1920px; height: 260px; background: linear-gradient(180deg, rgba(6,8,14,0.55) 0%, rgba(6,8,14,0) 100%); }
-#ic { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; padding: 30px 36px 26px; display: flex; flex-direction: column; }
+#golge { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #06080E; opacity: 0.14; transition: opacity 2.4s ease-in-out; }
+#ustgolge { position: absolute; left: 0; top: 0; width: 1920px; height: 240px; background: linear-gradient(180deg, rgba(6,8,14,0.60) 0%, rgba(6,8,14,0) 100%); }
+#ic { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; padding: 30px 36px 26px; text-shadow: 0 1px 2px rgba(0,0,0,0.55), 0 0 12px rgba(0,0,0,0.30); }
 
 /* üst bar */
 .ust { display: flex; align-items: center; height: 74px; margin-bottom: 20px; }
-.marka { display: flex; align-items: center; gap: 16px; }
-.logo { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #F2C14E, #E0763E); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 26px; color: #1A1206; font-stretch: 112%; }
-.ust { text-shadow: 0 2px 18px rgba(0,0,0,0.45); }
-.logo { text-shadow: none; }
+.marka { display: flex; align-items: center; }
+.marka > * + * { margin-left: 16px; }
+.logo { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #F2C14E, #E0763E); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 26px; color: #1A1206; font-stretch: 112%; text-shadow: none; }
 .marka b { font-size: 30px; font-weight: 750; font-stretch: 108%; letter-spacing: -0.3px; }
-.marka span { display: block; font-size: 17px; color: rgba(255,255,255,0.85); margin-top: 2px; }
+.marka span { display: block; font-size: 17px; color: rgba(255,255,255,0.88); margin-top: 2px; }
 .ornek { text-shadow: none; margin-left: 22px; font-size: 14px; font-weight: 700; letter-spacing: 1.2px; color: #1A1206; background: var(--vurgu); padding: 6px 12px; border-radius: 8px; }
 .saatkutu { margin-left: auto; text-align: right; }
 .saat { font-size: 64px; font-weight: 300; font-stretch: 90%; line-height: 1; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
-.tarih { font-size: 20px; color: rgba(255,255,255,0.88); margin-top: 4px; }
+.tarih { font-size: 20px; color: rgba(255,255,255,0.90); margin-top: 4px; }
 
-/* ızgara */
-.izgara { flex: 1; display: grid; grid-template-columns: 372px 1fr 404px; grid-template-rows: 1fr 236px; gap: 22px; min-height: 0; }
-.kart { background: rgba(26,30,40,0.78); border: 1px solid rgba(255,255,255,0.24); border-radius: 26px; padding: 22px 24px; min-height: 0; overflow: hidden; position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.32), inset 0 -1px 0 rgba(255,255,255,0.06); }
+/* sayfa sekmeleri */
+#sekmeler { display: flex; margin-left: 54px; }
+.sekme { position: relative; font-size: 16px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; color: rgba(255,255,255,0.66); padding: 11px 16px 13px; border-radius: 12px; margin-right: 4px; white-space: nowrap; transition: color 0.6s, background 0.6s; }
+.sekme.on { color: #fff; background: rgba(255,255,255,0.16); }
+.sekme i { position: absolute; left: 16px; right: 16px; bottom: 6px; height: 3px; border-radius: 2px; overflow: hidden; }
+.sekme.on i { background: rgba(255,255,255,0.22); }
+.sekme i u { display: block; height: 3px; width: 0; background: var(--vurgu); }
+
+/* sayfalar */
+#sayfalar { position: relative; width: 1848px; height: 930px; }
+.sayfa { position: absolute; left: 0; top: 0; width: 1848px; height: 930px; opacity: 0; visibility: hidden; transition: opacity 0.9s ease, visibility 0s linear 0.9s; }
+.sayfa.acik { opacity: 1; visibility: visible; transition: opacity 0.9s ease; }
+
+/* cam kart: az bulanık, saydam; yazı koyu ton + gölgeyle okunur */
+.kart { background: rgba(16,19,28,0.66); border: 1px solid rgba(255,255,255,0.34); border-radius: 26px; padding: 22px 24px; min-height: 0; overflow: hidden; position: relative; box-shadow: 0 18px 46px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.50), inset 0 -1px 0 rgba(255,255,255,0.10), inset 1px 0 0 rgba(255,255,255,0.10); }
 @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-  .kart { background: linear-gradient(145deg, rgba(255,255,255,0.19) 0%, rgba(255,255,255,0.07) 36%, rgba(14,16,26,0.26) 100%); -webkit-backdrop-filter: blur(40px) saturate(170%) brightness(0.86); backdrop-filter: blur(40px) saturate(170%) brightness(0.86); }
+  .kart { background: linear-gradient(150deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.03) 38%, rgba(8,10,18,0.10) 100%), rgba(8,10,18,0.30); -webkit-backdrop-filter: blur(6px) saturate(135%); backdrop-filter: blur(6px) saturate(135%); }
 }
-.kart:before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 46%; border-radius: 26px 26px 0 0; background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0)); pointer-events: none; }
+.kart:before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 90px; border-radius: 26px 26px 0 0; background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0)); pointer-events: none; }
 .kbas { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
-.kbas h2 { font-size: 15px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255,255,255,0.82); }
-.kbas small { font-size: 15px; color: var(--soluk2); }
-
-/* sol sütun */
-.sol { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; gap: 22px; min-height: 0; }
-.hava { flex: 0 0 auto; }
-.hsimdi { display: flex; align-items: center; gap: 14px; }
-.hsimdi svg { width: 84px; height: 84px; flex: none; }
-.hsag { margin-left: 6px; }
-.hderece { font-size: 80px; font-weight: 300; line-height: 0.9; font-stretch: 92%; letter-spacing: -2px; }
-.hderece sup { font-size: 34px; vertical-align: top; position: relative; top: 8px; }
-.hdurum { font-size: 19px; font-weight: 600; white-space: nowrap; }
-.hek { font-size: 15px; color: var(--soluk); margin-top: 3px; }
-.hnot { margin-top: 14px; font-size: 16px; line-height: 1.35; background: rgba(140,230,150,0.16); border: 1px solid rgba(160,240,170,0.38); color: #E6FBE4; border-radius: 12px; padding: 10px 14px; }
-.hsaat { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--cizgi); }
-.hsaat div { text-align: center; font-size: 15px; color: var(--soluk); width: 58px; }
-.hsaat svg { width: 30px; height: 30px; display: block; margin: 4px auto; }
-.hsaat b { font-size: 19px; color: var(--yazi); font-weight: 600; }
-.hsaat i { display: block; font-style: normal; font-size: 13px; color: #A9D4FF; margin-top: 2px; height: 16px; }
-.hgun { margin-top: 6px; }
-.hgun div { display: flex; align-items: center; font-size: 17px; padding: 4px 0; }
-.hgun span { width: 62px; color: var(--soluk); }
-.hgun svg { width: 26px; height: 26px; margin-right: 10px; }
-.hgun em { font-style: normal; color: #A9D4FF; font-size: 14px; width: 48px; }
-.hgun b { margin-left: auto; font-weight: 600; }
-.hgun b small { color: var(--soluk2); font-weight: 400; margin-left: 6px; font-size: 16px; }
-
-.hedef { flex: 1; }
-.hd { margin-bottom: 12px; }
-.hd:last-child { margin-bottom: 0; }
-.hdust { display: flex; align-items: baseline; font-size: 17px; line-height: 1.25; }
-.hdust b { font-weight: 600; flex: 1; padding-right: 10px; }
-.hdust span { font-size: 16px; color: var(--soluk); white-space: nowrap; font-variant-numeric: tabular-nums; }
-.bar { height: 8px; background: rgba(255,255,255,0.16); border-radius: 6px; margin-top: 6px; overflow: hidden; }
+.kbas h2 { font-size: 16px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255,255,255,0.90); }
+.kbas small { font-size: 16px; color: var(--soluk); }
+.kucuk { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #1A1206; background: var(--vurgu); padding: 2px 7px; border-radius: 6px; margin-left: 8px; vertical-align: 2px; text-transform: uppercase; text-shadow: none; }
+.bos { font-size: 15px; color: var(--soluk2); text-align: center; margin-top: 14px; }
+.buyukbos { font-size: 24px; line-height: 1.45; color: var(--soluk); text-align: center; margin: 200px auto 0; width: 1000px; }
+.buyukbos b { display: block; font-size: 34px; color: #fff; margin-bottom: 12px; }
+.bar { height: 8px; background: rgba(255,255,255,0.20); border-radius: 6px; margin-top: 6px; overflow: hidden; }
 .bar i { display: block; height: 100%; border-radius: 6px; background: var(--vurgu); }
-.hdalt { font-size: 14px; color: var(--soluk2); margin-top: 4px; }
+.yukari { color: #B4F5B2; }
 
-/* takvim */
-.takvim { grid-column: 2; grid-row: 1; padding: 22px 20px 18px; display: flex; flex-direction: column; }
-.hafta { flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 2.5fr 1fr 1fr 1fr; gap: 9px; min-height: 0; }
-.gun { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.09); border-radius: 18px; padding: 12px 8px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
-.gun.gecti { opacity: 0.6; }
-.gun.bugun { background: rgba(255,255,255,0.17); border-color: transparent; box-shadow: inset 0 0 0 2px var(--vurgu), 0 14px 40px rgba(0,0,0,0.25); padding: 12px 12px; }
+/* ---- haftalık takvim ---- */
+.takvim { position: absolute; left: 0; top: 0; width: 1848px; height: 930px; padding: 22px 20px 18px; display: flex; flex-direction: column; }
+.hafta { flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 2.5fr 1fr 1fr 1fr; grid-gap: 10px; min-height: 0; }
+.gun { background: rgba(8,10,18,0.22); border: 1px solid rgba(255,255,255,0.14); border-radius: 18px; padding: 12px 9px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.gun.gecti { opacity: 0.62; }
+.gun.bugun { background: rgba(255,255,255,0.15); border-color: transparent; box-shadow: inset 0 0 0 2px var(--vurgu), 0 14px 40px rgba(0,0,0,0.22); padding: 12px 12px; }
 .gbas { margin-bottom: 10px; }
 .gbas .ad { font-size: 15px; color: var(--soluk); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600; }
-.gbas .no { font-size: 34px; font-weight: 650; line-height: 1.05; font-stretch: 95%; }
+.gbas .no { font-size: 38px; font-weight: 650; line-height: 1.05; font-stretch: 95%; }
 .bugun .gbas .ad { color: var(--vurgu); }
-.gbas .ozet { font-size: 14px; color: var(--soluk); margin-top: 2px; }
-.bugun .gbas { display: flex; align-items: flex-end; gap: 12px; }
-.bugun .gbas .no { font-size: 40px; }
-.bugun .gbas .ozet { font-size: 16px; margin-bottom: 5px; }
-.turlar { display: flex; flex-direction: column; gap: 6px; }
-.tur { background: rgba(10,12,20,0.42); border-radius: 10px; border-left: 5px solid var(--direkt); padding: 6px 7px 7px; }
+.gbas .ozet { font-size: 15px; color: var(--soluk); margin-top: 2px; }
+.bugun .gbas { display: flex; align-items: flex-end; }
+.bugun .gbas > * + * { margin-left: 12px; }
+.bugun .gbas .no { font-size: 44px; }
+.bugun .gbas .ozet { font-size: 17px; margin-bottom: 6px; }
+.turlar { display: flex; flex-direction: column; }
+.turlar > * + * { margin-top: 7px; }
+.tur { background: rgba(8,10,18,0.50); border-radius: 10px; border-left: 5px solid var(--direkt); padding: 7px 8px 8px; }
 .tur.viator { border-left-color: var(--viator); }
 .tur.gyg { border-left-color: var(--gyg); }
-.tur .t1 { font-size: 17px; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.tur .t1 span { font-weight: 500; color: var(--soluk); font-size: 14px; margin-left: 3px; }
+.tur .t1 { font-size: 19px; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tur .t2 b { color: var(--yazi); font-weight: 600; }
-.tur .t2 { font-size: 13.5px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-.bugun .tur { padding: 8px 10px; display: flex; align-items: center; gap: 10px; }
-.bugun .tur .saatk { font-size: 20px; font-weight: 700; width: 58px; font-variant-numeric: tabular-nums; }
+.tur .t2 { font-size: 15px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+.tur .t2.ekip { color: rgba(255,255,255,0.90); font-size: 14px; }
+.bugun .tur { padding: 9px 12px; display: flex; align-items: center; }
+.bugun .tur > * + * { margin-left: 12px; }
+.bugun .tur .saatk { font-size: 23px; font-weight: 700; width: 66px; font-variant-numeric: tabular-nums; }
 .bugun .tur .bilgi { flex: 1; min-width: 0; }
-.bugun .tur .mus { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bugun .tur .urun { font-size: 14px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bugun .tur .kisi { font-size: 13px; color: var(--soluk); text-align: center; white-space: nowrap; width: 38px; }
-.bugun .tur .kisi b { display: block; font-size: 20px; line-height: 1.1; color: var(--yazi); }
+.bugun .tur .mus { font-size: 18px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bugun .tur .urun { font-size: 15px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bugun .tur .kisi { font-size: 13px; color: var(--soluk); text-align: center; white-space: nowrap; width: 40px; }
+.bugun .tur .kisi b { display: block; font-size: 22px; line-height: 1.1; color: var(--yazi); }
 .tur.bitti { opacity: 0.55; }
 .tur.simdi { box-shadow: 0 0 0 2px var(--iyi); }
-.etiket { display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing: 0.3px; white-space: nowrap; padding: 1px 7px; border-radius: 5px; background: rgba(224,166,62,0.18); color: var(--kehribar); margin-top: 3px; }
-.grup { border-radius: 11px; padding: 4px; background: repeating-linear-gradient(135deg, rgba(224,166,62,0.22) 0 6px, rgba(224,166,62,0.06) 6px 12px); display: flex; flex-direction: column; gap: 5px; }
-.bos { font-size: 14px; color: var(--soluk2); text-align: center; margin-top: 14px; }
-.lejant { display: flex; gap: 22px; margin-top: 12px; font-size: 14px; color: var(--soluk); padding-left: 4px; }
+.etiket { display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing: 0.3px; white-space: nowrap; padding: 1px 7px; border-radius: 5px; background: rgba(240,179,71,0.24); color: #FFD68A; margin-top: 3px; text-shadow: none; }
+.etiket.uyari { background: rgba(224,86,74,0.34); color: #FFC4BD; }
+.grup { border-radius: 11px; padding: 4px; background: repeating-linear-gradient(135deg, rgba(240,179,71,0.30) 0, rgba(240,179,71,0.30) 6px, rgba(240,179,71,0.08) 6px, rgba(240,179,71,0.08) 12px); display: flex; flex-direction: column; }
+.grup > * + * { margin-top: 5px; }
+.lejant { display: flex; margin-top: 12px; font-size: 15px; color: var(--soluk); padding-left: 4px; }
+.lejant > * + * { margin-left: 24px; }
 .lejant i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 7px; vertical-align: -1px; }
-
-/* rakamlar */
-.rakamlar { grid-column: 2; grid-row: 2; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22px; }
-.rk { display: flex; flex-direction: column; padding: 20px 22px; }
-.rk h3 { font-size: 15px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--soluk); }
-.rk .tutar { font-size: 52px; font-weight: 650; font-stretch: 92%; letter-spacing: -1px; margin-top: 4px; font-variant-numeric: tabular-nums; }
-.rk .tutar small { font-size: 22px; font-weight: 500; color: var(--soluk); margin-left: 6px; letter-spacing: 0; }
-.rk .adet { font-size: 17px; color: var(--soluk); margin-top: 0; }
-.rk .bar { height: 10px; margin-top: auto; }
-.rk .bar i { background: #8FE38C; }
-.rk .bek { display: flex; justify-content: space-between; font-size: 15px; color: var(--soluk); margin-top: 8px; }
-.rk .bek b { color: var(--yazi); font-weight: 600; }
-.yukari { color: #A6F0A4; }
-.asagi { color: #E7837A; }
-
-/* brif */
-.brif { grid-column: 3; grid-row: 1 / 3; display: flex; flex-direction: column; padding: 24px 26px; }
-.brif .kim { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-.brif .kim .av { width: 42px; height: 42px; border-radius: 50%; background: #D97757; display: flex; align-items: center; justify-content: center; }
-.brif .kim .av svg { width: 24px; height: 24px; }
-.brif .kim b { font-size: 21px; font-weight: 650; display: block; }
-.brif .kim span { font-size: 15px; color: var(--soluk); }
-.cumleler { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-.cumleler li { font-size: 20px; line-height: 1.36; padding: 10px 14px 10px 16px; border-radius: 12px; border-left: 4px solid transparent; color: rgba(255,255,255,0.80); transition: background 0.6s, color 0.6s, border-color 0.6s; }
-.cumleler li.on { background: rgba(255,255,255,0.16); color: var(--yazi); border-left-color: var(--vurgu); }
-.cumleler li b { color: var(--yazi); font-weight: 650; }
-.brif .alt { margin-top: auto; padding-top: 14px; font-size: 14px; color: var(--soluk2); display: flex; justify-content: space-between; border-top: 1px solid var(--cizgi); }
-
-/* ---- gerçek veri ekleri ---- */
 .gun.bugun.bosgun { padding: 12px 10px; }
-.bugunbos { margin-top: 26px; text-align: center; color: var(--soluk); font-size: 16px; line-height: 1.4; }
-.bugunbos b { display: block; color: var(--yazi); font-size: 19px; font-weight: 650; margin-bottom: 4px; }
+.bugunbos { margin-top: 26px; text-align: center; color: var(--soluk); font-size: 17px; line-height: 1.4; }
+.bugunbos b { display: block; color: var(--yazi); font-size: 20px; font-weight: 650; margin-bottom: 4px; }
 .fazla { font-size: 14px; font-weight: 600; color: var(--soluk); text-align: center; padding: 4px 0 0; }
-.tamam { font-size: 15px; font-weight: 600; color: #A6F0A4; background: rgba(140,230,150,0.12); border-radius: 10px; padding: 7px 10px; }
+.tamam { font-size: 15px; font-weight: 600; color: #B4F5B2; background: rgba(140,230,150,0.16); border-radius: 10px; padding: 7px 10px; }
 .bugun.sik .tur { padding: 5px 9px; }
 .bugun.sik .tur .saatk { font-size: 18px; width: 54px; }
 .bugun.sik .tur .mus { font-size: 15px; }
@@ -159,21 +119,177 @@ body { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; color: var(-
 .bugun.sik .tur .kisi b { font-size: 17px; }
 .bugun.sik .tur .kisi { font-size: 11px; }
 .bugun.sik .etsatir { display: none; }
-.bugun.sik .turlar { gap: 4px; }
-.bugun.sik .grup { gap: 4px; padding: 3px; }
-.kucuk { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #1A1206; background: var(--vurgu); padding: 2px 7px; border-radius: 6px; margin-left: 8px; vertical-align: 2px; text-transform: uppercase; }
-.etiket.uyari { background: rgba(224,86,74,0.26); color: #FFB3AB; }
-.tur .t2.ekip { color: rgba(255,255,255,0.86); font-size: 13px; }
+.bugun.sik .turlar > * + * { margin-top: 4px; }
+.bugun.sik .grup { padding: 3px; }
+.bugun.sik .grup > * + * { margin-top: 4px; }
 
-/* eski tarayıcılar için: flex gap yerine kenar boşluğu */
-.sol,.marka,.hsimdi,.bugun .tur,.bugun .gbas,.brif .kim,.cumleler,.turlar,.grup,.lejant{gap:0}
-.sol>*+*{margin-top:22px}.marka>*+*{margin-left:16px}.hsimdi>*+*{margin-left:14px}.hsimdi>.hsag{margin-left:20px}
-.bugun .tur>*+*{margin-left:10px}.bugun .gbas>*+*{margin-left:12px}.brif .kim>*+*{margin-left:12px}
-.cumleler>*+*{margin-top:6px}.turlar>*+*{margin-top:6px}.grup>*+*{margin-top:5px}.lejant>*+*{margin-left:22px}
-.bugun.sik .turlar>*+*{margin-top:4px}.bugun.sik .grup>*+*{margin-top:4px}
-.izgara,.rakamlar{grid-gap:22px}.hafta{grid-gap:9px}
-/* fotoğraf gelene kadar */
-#arka { background: #14121A linear-gradient(160deg, #1B2238 0%, #3A2C48 45%, #6B3F3A 100%); }
+/* ---- aylık takvim ---- */
+.ayk { position: absolute; left: 0; top: 0; width: 1416px; height: 930px; display: flex; flex-direction: column; padding: 22px 20px 20px; }
+.ayoz { position: absolute; left: 1438px; top: 0; width: 410px; height: 930px; padding: 24px 26px; }
+.aybas { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr; grid-gap: 10px; margin-bottom: 8px; }
+.aybas div { font-size: 15px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--soluk); padding-left: 12px; }
+.ayizgara { flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr; grid-gap: 10px; min-height: 0; }
+.ag { border-radius: 16px; padding: 9px 12px 10px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.14); background: rgba(8,10,18,0.22); }
+.ag.yok { border-color: transparent; background: none; }
+.ag.gecti { opacity: 0.74; }
+.ag.bugun { box-shadow: inset 0 0 0 2px var(--vurgu); border-color: transparent; }
+.ag .ustu { display: flex; align-items: baseline; justify-content: space-between; }
+.ag .no { font-size: 28px; font-weight: 650; font-stretch: 95%; line-height: 1; }
+.ag.bugun .no { color: var(--vurgu); }
+.ag .ts { font-size: 20px; font-weight: 650; white-space: nowrap; }
+.ag .ks { font-size: 16px; color: rgba(255,255,255,0.90); margin-top: auto; white-space: nowrap; }
+.ag .pl { display: flex; height: 7px; border-radius: 4px; overflow: hidden; margin-top: 6px; }
+.ag .pl i { display: block; height: 7px; }
+.ag .tatil { font-size: 14px; color: var(--soluk2); margin-top: auto; }
+.ozs { margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--cizgi); }
+.ozs:last-child { border-bottom: 0; margin-bottom: 0; }
+.ozs span { display: block; font-size: 15px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--soluk); }
+.ozs b { display: block; font-size: 46px; font-weight: 650; font-stretch: 92%; letter-spacing: -0.5px; line-height: 1.15; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.ozs b small { font-size: 22px; font-weight: 500; color: var(--soluk); letter-spacing: 0; margin-left: 6px; }
+.ozs em { display: block; font-style: normal; font-size: 17px; color: var(--soluk); margin-top: 2px; }
+
+/* ---- rakamlar ---- */
+.rsira { position: absolute; left: 0; top: 0; width: 1848px; height: 292px; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 22px; }
+.rk { display: flex; flex-direction: column; padding: 22px 26px; }
+.rk h3 { font-size: 16px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--soluk); }
+.rk .tutar { font-size: 78px; font-weight: 650; font-stretch: 92%; letter-spacing: -1.5px; line-height: 1.1; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.rk .tutar small { font-size: 26px; font-weight: 500; color: var(--soluk); margin-left: 8px; letter-spacing: 0; }
+.rk .adet { font-size: 21px; color: var(--soluk); }
+.rk .bar { height: 12px; margin-top: auto; }
+.rk .bar i { background: var(--iyi); }
+.rk .bek { display: flex; justify-content: space-between; font-size: 17px; color: var(--soluk); margin-top: 8px; }
+.rk .bek b { color: var(--yazi); font-weight: 600; }
+.rgrafik { position: absolute; left: 0; top: 314px; width: 1386px; height: 616px; display: flex; flex-direction: column; padding: 22px 24px 18px; }
+.rplat { position: absolute; left: 1408px; top: 314px; width: 440px; height: 616px; padding: 24px 26px; }
+.cubuklar { flex: 1; display: flex; align-items: flex-end; min-height: 0; border-bottom: 1px solid var(--cizgi); }
+.cb { flex: 1; margin: 0 3px; text-align: center; min-width: 0; }
+.cb em { display: block; font-style: normal; font-size: 13px; font-weight: 600; color: var(--soluk); margin-bottom: 4px; white-space: nowrap; }
+.cb i { display: block; border-radius: 6px 6px 0 0; background: var(--iyi); }
+.cb.ileri i { background: rgba(242,193,78,0.85); }
+.cb.bugun i { box-shadow: 0 0 0 2px #fff; }
+.cbno { display: flex; margin-top: 6px; }
+.cbno span { flex: 1; margin: 0 3px; text-align: center; font-size: 14px; color: var(--soluk2); font-variant-numeric: tabular-nums; }
+.cbno span.hs { color: var(--soluk); font-weight: 700; }
+.cbno span.bugun { color: var(--vurgu); font-weight: 800; }
+.pls { margin-bottom: 18px; }
+.pls .ust2 { display: flex; align-items: baseline; font-size: 21px; }
+.pls .ust2 i { width: 13px; height: 13px; border-radius: 4px; margin-right: 10px; display: inline-block; }
+.pls .ust2 b { font-weight: 600; flex: 1; }
+.pls .ust2 span { color: var(--soluk); font-size: 18px; font-variant-numeric: tabular-nums; }
+.pls .bar { height: 10px; }
+.ort { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--cizgi); }
+.ort div { display: flex; justify-content: space-between; align-items: baseline; font-size: 19px; color: var(--soluk); padding: 6px 0; }
+.ort div b { font-size: 28px; font-weight: 650; color: #fff; font-variant-numeric: tabular-nums; }
+
+/* ---- hava ---- */
+.hbuyuk { position: absolute; left: 0; top: 0; width: 560px; height: 930px; padding: 26px 30px; display: flex; flex-direction: column; }
+.hsaatk { position: absolute; left: 582px; top: 0; width: 1266px; height: 440px; padding: 22px 24px; display: flex; flex-direction: column; }
+.hgunk { position: absolute; left: 582px; top: 462px; width: 1266px; height: 468px; padding: 22px 24px; display: flex; flex-direction: column; }
+.hsimdi { display: flex; align-items: center; margin-top: 10px; }
+.hsimdi svg { width: 170px; height: 170px; flex: none; }
+.hderece { font-size: 170px; font-weight: 300; line-height: 0.9; font-stretch: 90%; letter-spacing: -5px; margin-left: 16px; }
+.hderece sup { font-size: 70px; vertical-align: top; position: relative; top: 16px; letter-spacing: 0; }
+.hdurum { font-size: 38px; font-weight: 600; margin-top: 18px; }
+.hek { font-size: 22px; color: var(--soluk); margin-top: 4px; }
+.hkutular { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 12px; margin-top: 26px; }
+.hkutu { background: rgba(8,10,18,0.30); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 12px 16px; }
+.hkutu span { display: block; font-size: 14px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; color: var(--soluk2); }
+.hkutu b { display: block; font-size: 30px; font-weight: 600; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.hnot { margin-top: auto; font-size: 22px; line-height: 1.35; background: rgba(110,210,125,0.24); border: 1px solid rgba(170,245,180,0.50); color: #EEFFEC; border-radius: 16px; padding: 16px 20px; }
+.hsutun { flex: 1; display: flex; min-height: 0; }
+.hs { flex: 1; text-align: center; border-left: 1px solid rgba(255,255,255,0.10); display: flex; flex-direction: column; }
+.hs:first-child { border-left: 0; }
+.hs .st { font-size: 20px; color: var(--soluk); font-variant-numeric: tabular-nums; }
+.hs svg { width: 54px; height: 54px; display: block; margin: 8px auto 0; }
+.hs .iz { flex: 1; position: relative; min-height: 0; }
+.hs .iz b { position: absolute; left: 0; right: 0; font-size: 38px; font-weight: 600; line-height: 1; }
+.hs .yg { font-size: 18px; color: #B9DCFF; height: 24px; font-weight: 600; }
+.hg { flex: 1; text-align: center; border-left: 1px solid rgba(255,255,255,0.10); display: flex; flex-direction: column; align-items: center; }
+.hg:first-child { border-left: 0; }
+.hg .gn { font-size: 24px; font-weight: 650; }
+.hg svg { width: 84px; height: 84px; margin-top: 10px; }
+.hg .yg { font-size: 20px; color: #B9DCFF; height: 28px; font-weight: 600; margin-top: 2px; }
+.hg .en { font-size: 46px; font-weight: 600; line-height: 1; margin-top: auto; }
+.hg .ara { width: 10px; flex: 0 0 70px; border-radius: 5px; background: linear-gradient(180deg, #F2C14E, #6FB2EE); margin: 10px 0; }
+.hg .mn { font-size: 30px; color: var(--soluk); line-height: 1; margin-bottom: 6px; }
+
+/* ---- sürücüler ---- */
+.ekipk { position: absolute; left: 0; top: 0; width: 1848px; height: 930px; padding: 24px 30px 20px; display: flex; flex-direction: column; }
+.ebas { display: flex; align-items: center; font-size: 15px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--soluk); padding-bottom: 10px; }
+.erow { display: flex; align-items: center; border-top: 1px solid rgba(255,255,255,0.14); }
+.e1 { width: 56px; font-size: 24px; font-weight: 600; color: var(--soluk2); font-variant-numeric: tabular-nums; }
+.e2 { width: 400px; font-size: 30px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; }
+.e2 small { font-size: 14px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #CFE6FF; background: rgba(111,178,238,0.28); border-radius: 6px; padding: 2px 8px; margin-left: 12px; vertical-align: 5px; text-shadow: none; }
+.e3 { flex: 1; padding-right: 30px; }
+.ecub { height: 20px; border-radius: 10px; background: rgba(255,255,255,0.14); overflow: hidden; display: flex; }
+.ecub i { display: block; height: 20px; background: var(--iyi); }
+.ecub i + i { background: rgba(242,193,78,0.85); }
+.e4 { width: 230px; text-align: right; }
+.e4 b { font-size: 40px; font-weight: 650; line-height: 1; font-variant-numeric: tabular-nums; }
+.e4 span { display: block; font-size: 15px; color: var(--soluk); margin-top: 2px; text-transform: none; letter-spacing: 0; font-weight: 400; }
+.e5 { width: 150px; text-align: right; font-size: 28px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ebas .e1, .ebas .e2, .ebas .e4, .ebas .e5 { font-size: 15px; font-weight: 700; color: var(--soluk); }
+.erow.sik .e2 { font-size: 24px; }
+.erow.sik .e4 b { font-size: 30px; }
+.erow.sik .e4 span { display: inline; margin-left: 8px; font-size: 14px; }
+.erow.sik .e5 { font-size: 23px; }
+.ealt { margin-top: auto; padding-top: 12px; font-size: 16px; color: var(--soluk); display: flex; border-top: 1px solid var(--cizgi); }
+.ealt span { margin-right: 26px; }
+.ealt i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 7px; vertical-align: -1px; }
+
+/* ---- motorlar ---- */
+.mbas { position: absolute; left: 0; top: 0; width: 1848px; height: 68px; padding: 0 26px; display: flex; align-items: center; border-radius: 20px; }
+.mbas:before { display: none; }
+.mbas h2 { font-size: 16px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; }
+.mbas .say { margin-left: auto; font-size: 19px; color: var(--soluk); }
+.mbas .say b { color: #fff; font-weight: 650; }
+.mizgara { position: absolute; left: 0; top: 88px; width: 1848px; height: 842px; display: grid; grid-gap: 18px; }
+.mk { padding: 18px 22px; display: flex; flex-direction: column; border-radius: 22px; }
+.mk .mad { font-size: 27px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.15; }
+.mk .mrozet { display: flex; align-items: center; margin-top: 8px; }
+.plaka { font-size: 17px; font-weight: 700; letter-spacing: 1.5px; background: rgba(255,255,255,0.92); color: #14161C; border-radius: 6px; padding: 2px 9px; text-shadow: none; margin-right: 10px; white-space: nowrap; }
+.durum { font-size: 15px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; border-radius: 6px; padding: 3px 10px; text-shadow: none; background: rgba(255,255,255,0.20); color: #fff; white-space: nowrap; }
+.durum.iyi { background: rgba(110,210,125,0.34); color: #DFFFDD; }
+.durum.yolda { background: rgba(111,178,238,0.36); color: #E2F1FF; }
+.durum.bakim { background: rgba(240,179,71,0.36); color: #FFE9BF; }
+.durum.kotu { background: rgba(224,86,74,0.42); color: #FFDAD5; }
+.mk .msatir { margin-top: auto; }
+.mk .msatir div { display: flex; justify-content: space-between; align-items: baseline; font-size: 18px; color: var(--soluk); padding: 4px 0; border-top: 1px solid rgba(255,255,255,0.12); }
+.mk .msatir div:first-child { border-top: 0; }
+.mk .msatir b { font-weight: 600; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mk .msatir b.yakin { color: #FFD68A; }
+.mk .msatir b.gecmis { color: var(--kotu); }
+.mk .mnot { font-size: 16px; color: var(--soluk); margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mizgara.sik .mk { padding: 12px 18px; }
+.mizgara.sik .mad { font-size: 22px; }
+.mizgara.sik .mrozet { margin-top: 5px; }
+.mizgara.sik .msatir div { font-size: 16px; padding: 2px 0; }
+.mizgara.sik .mnot, .mizgara.sik .mbakim { display: none; }
+.mizgara.sik .plaka { font-size: 15px; } .mizgara.sik .durum { font-size: 13px; }
+
+/* ---- brifing ve hedefler ---- */
+.brif { position: absolute; left: 0; top: 0; width: 1206px; height: 930px; display: flex; flex-direction: column; padding: 26px 30px; }
+.brif .kim { display: flex; align-items: center; margin-bottom: 20px; }
+.brif .kim > * + * { margin-left: 14px; }
+.brif .kim .av { width: 50px; height: 50px; border-radius: 50%; background: #D97757; display: flex; align-items: center; justify-content: center; }
+.brif .kim .av svg { width: 28px; height: 28px; }
+.brif .kim b { font-size: 25px; font-weight: 650; display: block; }
+.brif .kim span { font-size: 17px; color: var(--soluk); }
+.cumleler { list-style: none; }
+.cumleler li { font-size: 27px; line-height: 1.34; padding: 12px 18px 12px 20px; margin-top: 6px; border-radius: 14px; border-left: 5px solid transparent; color: rgba(255,255,255,0.86); transition: background 0.6s, color 0.6s, border-color 0.6s; }
+.cumleler li.on { background: rgba(255,255,255,0.17); color: var(--yazi); border-left-color: var(--vurgu); }
+.cumleler li b { color: var(--yazi); font-weight: 650; }
+.brif.sik1 .cumleler li { font-size: 23px; padding: 8px 16px 8px 18px; margin-top: 4px; }
+.brif.sik2 .cumleler li { font-size: 20px; padding: 5px 14px 5px 16px; margin-top: 2px; }
+.brif .alt { margin-top: auto; padding-top: 14px; font-size: 16px; color: var(--soluk2); display: flex; justify-content: space-between; border-top: 1px solid var(--cizgi); }
+.hedef { position: absolute; left: 1228px; top: 0; width: 620px; height: 930px; padding: 26px 30px; }
+.hd { margin-bottom: 26px; }
+.hdust { display: flex; align-items: baseline; font-size: 25px; line-height: 1.25; }
+.hdust b { font-weight: 600; flex: 1; padding-right: 12px; }
+.hdust span { font-size: 21px; color: var(--soluk); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.hd .bar { height: 12px; margin-top: 10px; }
+.hdalt { font-size: 18px; color: var(--soluk2); margin-top: 6px; }
+
 /* durum ekranı */
 #perde { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: rgba(8,10,16,0.82); display: flex; align-items: center; justify-content: center; z-index: 9; }
 #perde .kutu { width: 760px; text-align: center; background: rgba(30,34,46,0.92); border: 1px solid rgba(255,255,255,0.22); border-radius: 30px; padding: 54px 60px 50px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
@@ -197,20 +313,23 @@ body { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; color: var(-
       <div><b>Hello Rides</b><span>Ev paneli · Roma</span></div>
       <div class="ornek" id="ornek" style="display:none"></div>
     </div>
+    <div id="sekmeler"></div>
     <div class="saatkutu"><div class="saat" id="saat">--:--</div><div class="tarih" id="tarih"></div></div>
   </div>
-  <div class="izgara">
-    <div class="sol">
-      <div class="kart hava" id="hava"></div>
-      <div class="kart hedef" id="hedef"></div>
+  <div id="sayfalar">
+    <div class="sayfa" id="sHafta">
+      <div class="kart takvim">
+        <div class="kbas"><h2>Bu haftanın turları</h2><small id="haftaAralik"></small></div>
+        <div class="hafta" id="hafta"></div>
+        <div class="lejant"><span><i style="background:var(--viator)"></i>Viator</span><span><i style="background:var(--gyg)"></i>GetYourGuide</span><span id="lejDirekt"><i style="background:var(--direkt)"></i>Direkt</span><span><i style="background:repeating-linear-gradient(135deg,var(--kehribar) 0,var(--kehribar) 3px,transparent 3px,transparent 6px)"></i>Aynı saatte birden fazla çıkış</span></div>
+      </div>
     </div>
-    <div class="kart takvim">
-      <div class="kbas"><h2>Bu haftanın turları</h2><small id="haftaAralik"></small></div>
-      <div class="hafta" id="hafta"></div>
-      <div class="lejant"><span><i style="background:var(--viator)"></i>Viator</span><span><i style="background:var(--gyg)"></i>GetYourGuide</span><span id="lejDirekt"><i style="background:var(--direkt)"></i>Direkt</span><span><i style="background:repeating-linear-gradient(135deg,var(--kehribar) 0,var(--kehribar) 3px,transparent 3px,transparent 6px)"></i>Aynı saatte birden fazla çıkış</span></div>
-    </div>
-    <div class="rakamlar" id="rakamlar"></div>
-    <div class="kart brif" id="brif"></div>
+    <div class="sayfa" id="sAy"></div>
+    <div class="sayfa" id="sRakam"></div>
+    <div class="sayfa" id="sHava"></div>
+    <div class="sayfa" id="sEkip"></div>
+    <div class="sayfa" id="sMotor"></div>
+    <div class="sayfa" id="sBrif"><div class="kart brif" id="brif"></div><div class="kart hedef" id="hedef"></div></div>
   </div>
 </div>
 <div id="perde"><div class="kutu"><div class="logo">HR</div><div id="pBaslik">Bağlanıyor…</div><div id="pMetin"></div>
@@ -219,7 +338,9 @@ body { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; color: var(-
 </div>
 <script src="ayar.js"></script>
 <script>
-/* TV PANEL · sayfa. Veriyi Apps Script sunucusundan (ayar.js içindeki adres) 5 dakikada bir alır. */
+/* TV PANEL · sayfa. Veriyi Apps Script sunucusundan (ayar.js içindeki adres) 5 dakikada bir alır.
+   Ekran sayfalara bölünür; sayfalar "Sayfa süresi" kadar (varsayılan 60 sn) kalıp sırayla değişir.
+   Kumandanın sağ/sol tuşu sayfayı elle değiştirir. Adresin sonuna ?sayfa=hava (hafta, ay, rakam, hava, ekip, motor, brif) yazılırsa o sayfa sabit kalır. */
 var SUNUCU = window.PANEL_SUNUCU || "";
 var VERI = null, KOD = "", fark = 0, sonBasari = 0, acilis = new Date().getTime();
 
@@ -250,17 +371,17 @@ function arkaGoster(i) {
   $("golge").style.opacity = f.g;
   fotoKat = 1 - fotoKat;
 }
-/* Parlak fotoğraf daha çok karartılır ki yazılar okunsun. */
+/* Parlak fotoğraf biraz daha karartılır ki yazılar okunsun; fotoğrafın kendisi görünür kalır. */
 function koyuluk(u, bitti) {
   var im = new Image();
   im.onload = function () {
-    var g = 0.32;
+    var g = 0.14;
     try {
       var c = document.createElement("canvas"); c.width = 32; c.height = 18;
       var x = c.getContext("2d"); x.drawImage(im, 0, 0, 32, 18);
       var d = x.getImageData(0, 0, 32, 18).data, t = 0;
       for (var i = 0; i < d.length; i += 4) t += 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-      g = Math.max(0.2, Math.min(0.5, 0.18 + (t / (d.length / 4) - 70) / 255 * 0.9));
+      g = Math.max(0.06, Math.min(0.30, 0.04 + (t / (d.length / 4) - 70) / 255 * 0.5));
     } catch (e) {}
     bitti(g);
   };
@@ -290,16 +411,19 @@ var IK = {
   yagmur: '<svg viewBox="0 0 48 48"><path d="M13 30h23a9 9 0 0 0 0-18 12 12 0 0 0-22.7 4A7 7 0 0 0 13 30z" fill="#C3CCD4"/><g stroke="#8EC5FF" stroke-width="3" stroke-linecap="round"><path d="M17 35l-2 6M25 35l-2 6M33 35l-2 6"/></g></svg>',
   gece: '<svg viewBox="0 0 48 48"><path d="M31 8a15 15 0 1 0 9 26A13 13 0 0 1 31 8z" fill="#E3E9EE"/></svg>'
 };
+function ikon(ad) { return IK[ad] || IK.bulut; }
 
 var GUN = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
 var GUNK = ["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
 var AY = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
-function para(n) { var s = String(Math.round(n)), c = ""; while (s.length > 3) { c = "." + s.slice(-3) + c; s = s.slice(0, -3); } return "€" + s + c; }
+var AYK = ["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
+function binlik(n) { var s = String(Math.abs(Math.round(n))), c = ""; while (s.length > 3) { c = "." + s.slice(-3) + c; s = s.slice(0, -3); } return (n < 0 ? "-" : "") + s + c; }
+function para(n) { return "€" + binlik(n); }
 function iki(n) { return (n < 10 ? "0" : "") + n; }
 function tarihOku(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
 function zamanOku(s) { var m = String(s).match(/(\d+)-(\d+)-(\d+)T(\d+):(\d+):?(\d+)?/); return m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +(m[6] || 0)) : new Date(); }
 function dk(saat) { var p = String(saat).split(":"); return (+p[0] || 0) * 60 + (+p[1] || 0); }
-function kac(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function kac(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
 /* Saat sunucudan (Roma saati) alınır; TV'nin saati yanlış olsa da panel doğru gösterir. */
 function simdi() { return new Date(new Date().getTime() + fark); }
@@ -314,33 +438,14 @@ function saatCiz() {
   if (gec && VERI) r.textContent = "BAĞLANTI YOK · SON VERİ " + VERI.guncel;
 }
 
-function havaCiz() {
-  var h = VERI.hava;
-  if (!h) { $("hava").innerHTML = '<div class="kbas"><h2>Hava · Roma</h2></div><div class="bos">Hava verisi şu an alınamıyor</div>'; return; }
-  var s = '<div class="kbas"><h2>Hava · ' + kac(h.sehir) + '</h2><small>Open-Meteo</small></div>';
-  s += '<div class="hsimdi">' + IK[h.ikon] + '<div class="hderece">' + h.derece + '<sup>°</sup></div><div class="hsag"><div class="hdurum">' + kac(h.durum) + '</div><div class="hek">Hissedilen ' + h.hissedilen + '°</div><div class="hek">Rüzgâr ' + h.ruzgar + ' km/s</div><div class="hek">Yağmur %' + h.yagmur + '</div></div></div>';
-  if (h.not) s += '<div class="hnot">' + kac(h.not) + '</div>';
-  s += '<div class="hsaat">' + h.saatlik.map(function (x) { return '<div>' + x.s + ':00' + IK[x.i] + '<b>' + x.d + '°</b><i>' + (x.y >= 20 ? '%' + x.y : '') + '</i></div>'; }).join("") + '</div>';
-  s += '<div class="hgun">' + h.gunler.map(function (x) { return '<div><span>' + x.g + '</span>' + IK[x.i] + '<em>' + (x.y >= 20 ? '%' + x.y : '') + '</em><b>' + x.en + '°<small>' + x.min + '°</small></b></div>'; }).join("") + '</div>';
-  $("hava").innerHTML = s;
-}
-
-function hedefCiz() {
-  var s = '<div class="kbas"><h2>Hello Rides hedefleri' + (VERI.hedefOrnek ? '<span class="kucuk">örnek</span>' : '') + '</h2></div>';
-  if (!VERI.hedefler.length) s += '<div class="bos">"TV Panel" tablosundaki Hedefler sayfasına yaz, burada görünsün.</div>';
-  s += VERI.hedefler.map(function (h) {
-    return '<div class="hd"><div class="hdust"><b>' + kac(h.ad) + '</b><span>' + kac(h.durum || "") + '</span></div><div class="bar"><i style="width:' + Math.max(0, Math.min(100, +h.oran || 0)) + '%"></i></div>' + (h.alt ? '<div class="hdalt">' + kac(h.alt) + '</div>' : '') + '</div>';
-  }).join("");
-  $("hedef").innerHTML = s;
-}
-
+/* ================= sayfa: haftalık takvim ================= */
 function turKutu(t, bugun, simdiDk) {
   var c = "tur " + t.platform;
   if (!bugun) return '<div class="' + c + '"><div class="t1">' + t.saat + '</div><div class="t2"><b>' + t.kisi + ' kişi</b></div><div class="t2">' + kac(t.urun) + '</div>' + (t.atanmadi ? '<div><span class="etiket uyari">ekip yok</span></div>' : t.ekip ? '<div class="t2 ekip">' + kac(t.ekip.split(" · ")[0]) + '</div>' : '') + '</div>';
   var bas = dk(t.saat);
   if (simdiDk >= bas + 90) c += " bitti"; else if (simdiDk >= bas) c += " simdi";
   var etl = (t.atanmadi ? ["ekip yok"] : []).concat(t.etiket);
-  var et = etl.slice(0, 2).map(function (e) { return '<span class="etiket' + (e === "ekip yok" ? ' uyari' : '') + '">' + kac(e) + '</span>'; }).join(" ");
+  var et = etl.slice(0, 3).map(function (e) { return '<span class="etiket' + (e === "ekip yok" ? ' uyari' : '') + '">' + kac(e) + '</span>'; }).join(" ");
   return '<div class="' + c + '"><div class="saatk">' + t.saat + '</div><div class="bilgi"><div class="mus">' + kac(t.musteri) + '</div><div class="urun">' + kac(t.urun) + (t.ekip ? ' · ' + kac(t.ekip) : '') + '</div>' + (et ? '<div class="etsatir">' + et + '</div>' : '') + '</div><div class="kisi"><b>' + t.kisi + '</b>kişi</div></div>';
 }
 
@@ -408,23 +513,183 @@ function sigdir() {
   }
 }
 
-function rakamCiz() {
-  $("rakamlar").innerHTML = VERI.rakamlar.map(function (r) {
-    var varmi = r.kiyas > 0, y = varmi ? Math.round(r.net / r.kiyas * 100) : 0, ust = varmi && r.net >= r.kiyas;
-    return '<div class="kart rk"><h3>' + kac(r.ad) + '</h3><div class="tutar">' + para(r.net) + '<small>net</small></div><div class="adet">' + r.tur + ' tur · ' + r.kisi + ' kişi</div><div class="bar"><i style="width:' + Math.min(100, y) + '%' + (ust ? '' : ';background:var(--vurgu)') + '"></i></div><div class="bek"><span>' + kac(r.kiyasAd) + ' <b>' + (varmi ? para(r.kiyas) : "—") + '</b></span><span class="' + (ust ? "yukari" : "") + '">' + (varmi ? '%' + y : '') + '</span></div><div class="bek" style="margin-top:3px"><span>' + kac(r.alt) + '</span></div></div>';
-  }).join("");
+/* ================= sayfa: aylık takvim ================= */
+function ayCiz() {
+  var a = VERI.ay, bS = bugunS(), gunler = a.gunler, enCok = 0, toplam = { n: 0, k: 0, dolu: 0, kalan: 0, kalanK: 0 }, yogun = null;
+  gunler.forEach(function (g) {
+    if (g.n > enCok) enCok = g.n;
+    toplam.n += g.n; toplam.k += g.k; if (g.n) toplam.dolu++;
+    if (g.t > bS) { toplam.kalan += g.n; toplam.kalanK += g.k; }
+    if (g.n && (!yogun || g.n > yogun.n || (g.n === yogun.n && g.k > yogun.k))) yogun = g;
+  });
+  var ilk = tarihOku(gunler[0].t), bosluk = (ilk.getDay() + 6) % 7, hucre = [], i;
+  for (i = 0; i < bosluk; i++) hucre.push(null);
+  for (i = 0; i < gunler.length; i++) hucre.push(gunler[i]);
+  while (hucre.length % 7) hucre.push(null);
+  var satir = hucre.length / 7, sr = [];
+  for (i = 0; i < satir; i++) sr.push("1fr");
+
+  var s = '<div class="kart ayk"><div class="kbas"><h2>' + kac(a.ad) + ' ' + a.yil + ' · tur takvimi</h2><small>' + toplam.n + ' tur · ' + toplam.k + ' kişi</small></div>';
+  s += '<div class="aybas">' + ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"].map(function (x) { return '<div>' + x + '</div>'; }).join("") + '</div>';
+  s += '<div class="ayizgara" style="grid-template-rows:' + sr.join(" ") + '">';
+  hucre.forEach(function (g) {
+    if (!g) { s += '<div class="ag yok"></div>'; return; }
+    var c = "ag" + (g.t === bS ? " bugun" : g.t < bS ? " gecti" : ""), koyu = g.n && enCok ? (0.10 + 0.20 * g.n / enCok).toFixed(2) : 0;
+    s += '<div class="' + c + '"' + (g.n ? ' style="background:rgba(255,255,255,' + koyu + ')"' : '') + '><div class="ustu"><div class="no">' + (+g.t.slice(8)) + '</div>' + (g.n ? '<div class="ts">' + g.n + ' tur</div>' : '') + '</div>';
+    if (g.n) s += '<div class="ks">' + g.k + ' kişi</div><div class="pl">' + (g.v ? '<i style="flex:' + g.v + ';background:var(--viator)"></i>' : '') + (g.g ? '<i style="flex:' + g.g + ';background:var(--gyg)"></i>' : '') + (g.d ? '<i style="flex:' + g.d + ';background:var(--direkt)"></i>' : '') + '</div>';
+    else s += '<div class="tatil">' + (g.t === bS ? "Bugün tur yok" : "") + '</div>';
+    s += '</div>';
+  });
+  s += '</div><div class="lejant"><span><i style="background:var(--viator)"></i>Viator</span><span><i style="background:var(--gyg)"></i>GetYourGuide</span><span><i style="background:var(--direkt)"></i>Direkt</span><span>Dolu günler daha açık renkte</span></div></div>';
+
+  var r = VERI.rakamlar[2] || {};
+  s += '<div class="kart ayoz"><div class="kbas"><h2>' + kac(a.ad) + ' özeti</h2></div>';
+  s += '<div class="ozs"><span>Toplam</span><b>' + toplam.n + '<small>tur</small></b><em>' + toplam.k + ' kişi · ' + para(r.net || 0) + ' net</em></div>';
+  s += '<div class="ozs"><span>Kalan rezervasyon</span><b>' + toplam.kalan + '<small>tur</small></b><em>' + (toplam.kalan ? toplam.kalanK + ' kişi, yarından ay sonuna' : 'Ay sonuna kadar yeni tur görünmüyor') + '</em></div>';
+  if (yogun) { var yd = tarihOku(yogun.t); s += '<div class="ozs"><span>En yoğun gün</span><b>' + yd.getDate() + ' ' + AY[yd.getMonth()] + '</b><em>' + GUN[yd.getDay()] + ' · ' + yogun.n + ' tur, ' + yogun.k + ' kişi</em></div>'; }
+  s += '<div class="ozs"><span>Turlu gün</span><b>' + toplam.dolu + '<small>/ ' + gunler.length + ' gün</small></b><em>' + (gunler.length - toplam.dolu) + ' gün boş</em></div>';
+  s += '</div>';
+  $("sAy").innerHTML = s;
 }
 
+/* ================= sayfa: rakamlar ================= */
+function kisaTutar(n) { return n >= 10000 ? Math.round(n / 1000) + "b" : n >= 1000 ? (Math.round(n / 100) / 10).toString().replace(".", ",") + "b" : String(n); }
+function rakamCiz() {
+  var s = '<div class="rsira">' + VERI.rakamlar.map(function (r) {
+    var varmi = r.kiyas > 0, y = varmi ? Math.round(r.net / r.kiyas * 100) : 0, ust = varmi && r.net >= r.kiyas;
+    return '<div class="kart rk"><h3>' + kac(r.ad) + '</h3><div class="tutar">' + para(r.net) + '<small>net</small></div><div class="adet">' + r.tur + ' tur · ' + r.kisi + ' kişi</div><div class="bar"><i style="width:' + Math.min(100, y) + '%' + (ust ? '' : ';background:var(--vurgu)') + '"></i></div><div class="bek"><span>' + kac(r.kiyasAd) + ' <b>' + (varmi ? para(r.kiyas) : "—") + '</b></span><span class="' + (ust ? "yukari" : "") + '">' + (varmi ? '%' + y : '') + '</span></div><div class="bek" style="margin-top:3px"><span>' + kac(r.alt) + '</span></div></div>';
+  }).join("") + '</div>';
+
+  var a = VERI.ay;
+  if (a && a.gunler) {
+    var bS = bugunS(), enCok = 0, pv = 0, pg = 0, pd = 0, tur = 0, kisi = 0, net = 0;
+    a.gunler.forEach(function (g) { if (g.e > enCok) enCok = g.e; pv += g.v; pg += g.g; pd += g.d; tur += g.n; kisi += g.k; net += g.e || 0; });
+    s += '<div class="kart rgrafik"><div class="kbas"><h2>' + kac(a.ad) + ' · gün gün net (€)</h2><small>' + (enCok ? 'en yüksek gün ' + para(enCok) : '') + '</small></div><div class="cubuklar">';
+    a.gunler.forEach(function (g) {
+      var h = enCok && g.e > 0 ? Math.max(4, Math.round(g.e / enCok * 400)) : 0;
+      s += '<div class="cb' + (g.t === bS ? " bugun" : g.t > bS ? " ileri" : "") + '">' + (h ? '<em>' + kisaTutar(g.e) + '</em><i style="height:' + h + 'px"></i>' : '') + '</div>';
+    });
+    s += '</div><div class="cbno">' + a.gunler.map(function (g) { var w = tarihOku(g.t).getDay(); return '<span class="' + (g.t === bS ? "bugun" : w === 0 || w === 6 ? "hs" : "") + '">' + (+g.t.slice(8)) + '</span>'; }).join("") + '</div>';
+    s += '<div class="lejant"><span><i style="background:var(--iyi)"></i>Yapılan</span><span><i style="background:rgba(242,193,78,0.85)"></i>Rezerve (henüz çıkmadı)</span><span>b = bin €</span></div></div>';
+
+    function pl(ad, renk, n) { return '<div class="pls"><div class="ust2"><i style="background:' + renk + '"></i><b>' + ad + '</b><span>' + n + ' tur' + (tur ? ' · %' + Math.round(n / tur * 100) : '') + '</span></div><div class="bar"><i style="width:' + (tur ? Math.round(n / tur * 100) : 0) + '%;background:' + renk + '"></i></div></div>'; }
+    s += '<div class="kart rplat"><div class="kbas"><h2>' + kac(a.ad) + ' · platformlar</h2></div>' + pl("Viator", "var(--viator)", pv) + pl("GetYourGuide", "var(--gyg)", pg) + (pd ? pl("Direkt", "var(--direkt)", pd) : "");
+    s += '<div class="ort"><div><span>Tur başına net</span><b>' + (tur ? para(net / tur) : "—") + '</b></div><div><span>Kişi başına net</span><b>' + (kisi ? para(net / kisi) : "—") + '</b></div><div><span>Tur başına kişi</span><b>' + (tur ? (Math.round(kisi / tur * 10) / 10).toString().replace(".", ",") : "—") + '</b></div><div><span>Günlük ortalama</span><b>' + para(net / a.gunler.length) + '</b></div></div></div>';
+  }
+  $("sRakam").innerHTML = s;
+}
+
+/* ================= sayfa: hava ================= */
+function havaCiz() {
+  var h = VERI.hava;
+  if (!h) { $("sHava").innerHTML = ""; return; }
+  var s = '<div class="kart hbuyuk"><div class="kbas"><h2>Hava · ' + kac(h.sehir) + '</h2><small>Open-Meteo</small></div>';
+  s += '<div class="hsimdi">' + ikon(h.ikon) + '<div class="hderece">' + h.derece + '<sup>°</sup></div></div>';
+  s += '<div class="hdurum">' + kac(h.durum) + '</div><div class="hek">Hissedilen ' + h.hissedilen + '°' + (h.en !== undefined ? ' · bugün ' + h.en + '° / ' + h.min + '°' : '') + '</div>';
+  s += '<div class="hkutular"><div class="hkutu"><span>Rüzgâr</span><b>' + h.ruzgar + ' km/s</b></div><div class="hkutu"><span>Yağmur ihtimali</span><b>%' + (h.yagmurGun !== undefined ? Math.max(h.yagmur, h.yagmurGun) : h.yagmur) + '</b></div>';
+  if (h.nem !== undefined) s += '<div class="hkutu"><span>Nem</span><b>%' + h.nem + '</b></div>';
+  if (h.dogus && h.batis) s += '<div class="hkutu"><span>Gün doğumu · batımı</span><b>' + kac(h.dogus) + ' · ' + kac(h.batis) + '</b></div>';
+  s += '</div>' + (h.not ? '<div class="hnot">' + kac(h.not) + '</div>' : '') + '</div>';
+
+  var enY = -99, enD = 99;
+  h.saatlik.forEach(function (x) { if (x.d > enY) enY = x.d; if (x.d < enD) enD = x.d; });
+  s += '<div class="kart hsaatk"><div class="kbas"><h2>Önümüzdeki saatler</h2><small>sıcaklık · yağmur ihtimali</small></div><div class="hsutun">';
+  h.saatlik.forEach(function (x) {
+    var ust = enY > enD ? Math.round((enY - x.d) / (enY - enD) * 120) : 60;   /* sıcak saat yukarıda, serin saat aşağıda durur */
+    s += '<div class="hs"><div class="st">' + kac(x.s) + ':00</div>' + ikon(x.i) + '<div class="iz"><b style="top:' + (14 + ust) + 'px">' + x.d + '°</b></div><div class="yg">' + (x.y >= 20 ? '%' + x.y : '') + '</div></div>';
+  });
+  s += '</div></div>';
+
+  s += '<div class="kart hgunk"><div class="kbas"><h2>Önümüzdeki günler</h2><small>en yüksek · en düşük</small></div><div class="hsutun">';
+  h.gunler.forEach(function (x) {
+    s += '<div class="hg"><div class="gn">' + kac(x.g) + '</div>' + ikon(x.i) + '<div class="yg">' + (x.y >= 20 ? 'yağmur %' + x.y : '') + '</div><div class="en">' + x.en + '°</div><div class="ara"></div><div class="mn">' + x.min + '°</div></div>';
+  });
+  s += '</div></div>';
+  $("sHava").innerHTML = s;
+}
+
+/* ================= sayfa: sürücüler ================= */
+function ekipCiz() {
+  var e = VERI.ekip, l = e.liste || [], enCok = 1;
+  l.forEach(function (x) { if (x.ay > enCok) enCok = x.ay; });
+  var s = '<div class="kart ekipk"><div class="kbas"><h2>Sürücüler ve rehberler · ' + kac(e.ay) + '</h2><small>' + (e.ekipsiz ? e.ekipsiz + ' turun ekibi henüz atanmadı' : 'kim kaç tura çıktı') + '</small></div>';
+  if (!l.length) s += '<div class="buyukbos"><b>Henüz sayılacak tur yok</b>Takvimdeki tur kartlarının açıklamasına "Guide: …" ve "Drivers: …" satırları yazıldıkça burada kişi kişi sayılır.</div>';
+  else {
+    var sik = l.length > 9, yuk = Math.min(88, Math.floor(730 / l.length));
+    s += '<div class="ebas"><div class="e1">#</div><div class="e2">İsim</div><div class="e3"></div><div class="e4">' + kac(e.ay) + '</div><div class="e5">Bu hafta</div><div class="e5">' + kac(e.onceki) + '</div><div class="e5">Yolcu</div></div>';
+    l.forEach(function (x, i) {
+      var rol = x.rehber && x.surucu ? "rehber + sürücü" : x.rehber ? "rehber" : "";
+      s += '<div class="erow' + (sik ? " sik" : "") + '" style="height:' + yuk + 'px"><div class="e1">' + (i + 1) + '</div><div class="e2">' + kac(x.ad) + (rol ? '<small>' + rol + '</small>' : '') + '</div>';
+      s += '<div class="e3"><div class="ecub"><i style="width:' + (x.yap / enCok * 100).toFixed(1) + '%"></i><i style="width:' + ((x.ay - x.yap) / enCok * 100).toFixed(1) + '%"></i></div></div>';
+      s += '<div class="e4"><b>' + x.ay + '</b><span>' + x.yap + ' çıktı' + (x.ay - x.yap ? ' · ' + (x.ay - x.yap) + ' rezerve' : '') + '</span></div><div class="e5">' + x.hafta + '</div><div class="e5">' + x.onceki + '</div><div class="e5">' + x.kisi + '</div></div>';
+    });
+    s += '<div class="ealt"><span><i style="background:var(--iyi)"></i>Çıkılan tur</span><span><i style="background:rgba(242,193,78,0.85)"></i>Rezerve, henüz çıkılmadı</span><span>Yolcu: ' + kac(e.ay) + ' ayında taşınan kişi</span></div>';
+  }
+  $("sEkip").innerHTML = s + '</div>';
+}
+
+/* ================= sayfa: motorlar ================= */
+function durumSinif(d) {
+  d = String(d || "").toLowerCase();
+  if (/ar[ıi]za|bozuk|kaza|hasar|kullan[ıi]lm/.test(d)) return "kotu";
+  if (/bak[ıi]m|servis|tamir|bekl|par[çc]a/.test(d)) return "bakim";
+  if (/turda|yolda|kirada|d[ıi][şs]ar/.test(d)) return "yolda";
+  if (/haz[ıi]r|aktif|m[üu]sait|iyi|sa[ğg]lam|ok/.test(d)) return "iyi";
+  return "";
+}
+/* 'yyyy-MM-dd' → "15 Mar 2027"; uyar: bitiş tarihi yaklaşınca sarı, geçince kırmızı */
+function tarihGoster(t, uyar) {
+  var m = String(t || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return t ? '<b>' + kac(t) + '</b>' : '<b>—</b>';
+  var d = new Date(+m[1], +m[2] - 1, +m[3]), yazi = d.getDate() + " " + AYK[d.getMonth()] + " " + d.getFullYear(), c = "";
+  if (uyar) {
+    var gun = Math.round((d.getTime() - tarihOku(bugunS()).getTime()) / 86400000);
+    if (gun < 0) { c = "gecmis"; yazi += " · geçti"; } else if (gun <= 30) { c = "yakin"; yazi += " · " + gun + " gün"; }
+  }
+  return '<b' + (c ? ' class="' + c + '"' : '') + '>' + yazi + '</b>';
+}
+function motorCiz() {
+  var l = VERI.motorlar || [], say = {}, sira = [];
+  l.forEach(function (m) { var d = m.durum || "Durum yok"; if (!say[d]) { say[d] = 0; sira.push(d); } say[d]++; });
+  var s = '<div class="kart mbas"><h2>Motorlar' + (VERI.motorOrnek ? '<span class="kucuk">örnek</span>' : '') + '</h2><div class="say"><b>' + l.length + '</b> motor' + sira.map(function (d) { return ' · <b>' + say[d] + '</b> ' + kac(d.toLowerCase()); }).join("") + '</div></div>';
+  if (!l.length) s += '<div class="kart mizgara" style="display:block"><div class="buyukbos"><b>Motor listesi boş</b>Drive › "TV Panel" tablosundaki Motorlar sayfasına her motoru bir satır olarak yaz: ad, plaka, durum, km, sigorta bitişi, muayene, son bakım, not.</div></div>';
+  else {
+    var n = l.length, sutun = n <= 6 || n === 9 ? 3 : n <= 16 ? 4 : n <= 20 ? 5 : 6, satir = Math.ceil(n / sutun), a = [], b = [], i;
+    for (i = 0; i < sutun; i++) a.push("1fr");
+    for (i = 0; i < Math.max(2, satir); i++) b.push("1fr");
+    s += '<div class="mizgara' + (satir >= 4 ? " sik" : "") + '" style="grid-template-columns:' + a.join(" ") + ';grid-template-rows:' + b.join(" ") + '">';
+    l.forEach(function (m) {
+      s += '<div class="kart mk"><div class="mad">' + kac(m.ad) + '</div><div class="mrozet">' + (m.plaka ? '<span class="plaka">' + kac(m.plaka) + '</span>' : '') + (m.durum ? '<span class="durum ' + durumSinif(m.durum) + '">' + kac(m.durum) + '</span>' : '') + '</div>';
+      s += '<div class="msatir">' + (m.km !== "" && m.km !== undefined ? '<div><span>Kilometre</span><b>' + binlik(m.km) + ' km</b></div>' : '') + '<div><span>Sigorta bitiş</span>' + tarihGoster(m.sigorta, true) + '</div><div><span>Muayene</span>' + tarihGoster(m.muayene, true) + '</div><div class="mbakim"><span>Son bakım</span>' + tarihGoster(m.bakim, false) + '</div></div>';
+      s += (m.not ? '<div class="mnot">' + kac(m.not) + '</div>' : '') + '</div>';
+    });
+    s += '</div>';
+  }
+  $("sMotor").innerHTML = s;
+}
+
+/* ================= sayfa: brifing ve hedefler ================= */
+function hedefCiz() {
+  var s = '<div class="kbas"><h2>Hello Rides hedefleri' + (VERI.hedefOrnek ? '<span class="kucuk">örnek</span>' : '') + '</h2></div>';
+  if (!VERI.hedefler.length) s += '<div class="bos" style="font-size:20px;margin-top:60px">"TV Panel" tablosundaki Hedefler sayfasına yaz, burada görünsün.</div>';
+  s += VERI.hedefler.map(function (h) {
+    return '<div class="hd"><div class="hdust"><b>' + kac(h.ad) + '</b><span>' + kac(h.durum || "") + '</span></div><div class="bar"><i style="width:' + Math.max(0, Math.min(100, +h.oran || 0)) + '%"></i></div>' + (h.alt ? '<div class="hdalt">' + kac(h.alt) + '</div>' : '') + '</div>';
+  }).join("");
+  $("hedef").innerHTML = s;
+}
 var odak = 0;
 function brifCiz() {
   var b = VERI.brif;
-  var av = b.claude ? '<div class="av"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2l1.8 6.6L20 7l-4.4 5L20 17l-6.2-1.6L12 22l-1.8-6.6L4 17l4.4-5L4 7l6.2 1.6z"/></svg></div>' : '<div class="av" style="background:rgba(255,255,255,0.18)"><svg viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" d="M5 7h14M5 12h14M5 17h9"/></svg></div>';
+  var av = b.claude ? '<div class="av"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2l1.8 6.6L20 7l-4.4 5L20 17l-6.2-1.6L12 22l-1.8-6.6L4 17l4.4-5L4 7l6.2 1.6z"/></svg></div>' : '<div class="av" style="background:rgba(255,255,255,0.20)"><svg viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" d="M5 7h14M5 12h14M5 17h9"/></svg></div>';
   var s = '<div class="kbas"><h2>Günün brifingi</h2></div><div class="kim">' + av + '<div><b>' + kac(b.kim) + '</b><span>' + kac(b.alt) + '</span></div></div>';
   if (odak >= b.cumleler.length) odak = 0;
   /* cümleler sunucuda kurulur; içlerinde yalnızca <b> vurgusu vardır */
   s += '<ul class="cumleler">' + b.cumleler.map(function (c, i) { return '<li' + (i === odak ? ' class="on"' : '') + '>' + kac(c).replace(/&lt;(\/?)b&gt;/g, "<$1b>") + '</li>'; }).join("") + '</ul>';
   s += '<div class="alt"><span>Son güncelleme ' + kac(VERI.guncel) + '</span><span>5 dk\'da bir yenilenir</span></div>';
-  $("brif").innerHTML = s;
+  var k = $("brif");
+  k.className = "kart brif"; k.innerHTML = s;
+  /* cümleler sığmıyorsa yazıyı kademeli küçült */
+  if (tasiyor(k)) { k.className = "kart brif sik1"; if (tasiyor(k)) k.className = "kart brif sik2"; }
 }
 function odakIlerle() {
   var li = document.querySelectorAll(".cumleler li");
@@ -432,6 +697,49 @@ function odakIlerle() {
   li[odak % li.length].className = "";
   odak = (odak + 1) % li.length;
   li[odak].className = "on";
+}
+
+/* ================= sayfa döngüsü ================= */
+var SAYFALAR = [
+  { id: "sHafta", kisa: "hafta", ad: function () { return "Bu hafta"; }, var_: function () { return true; } },
+  { id: "sAy", kisa: "ay", ad: function () { return VERI.ay.ad; }, var_: function () { return !!(VERI.ay && VERI.ay.gunler && VERI.ay.gunler.length); } },
+  { id: "sRakam", kisa: "rakam", ad: function () { return "Rakamlar"; }, var_: function () { return !!(VERI.rakamlar && VERI.rakamlar.length); } },
+  { id: "sHava", kisa: "hava", ad: function () { return "Hava"; }, var_: function () { return !!VERI.hava; } },
+  { id: "sEkip", kisa: "ekip", ad: function () { return "Sürücüler"; }, var_: function () { return !!VERI.ekip; } },
+  { id: "sMotor", kisa: "motor", ad: function () { return "Motorlar"; }, var_: function () { return !!VERI.motorlar; } },
+  { id: "sBrif", kisa: "brif", ad: function () { return "Brifing"; }, var_: function () { return !!VERI.brif; } }
+];
+var acikSayfalar = [], sayfaNo = 0, sayfaZaman = null, sekmeImza = "";
+var SABIT = (String(window.location.search || "").match(/[?&]sayfa=([a-z]+)/) || [])[1] || "";
+function sayfaSure() { return Math.max(15, (VERI && +VERI.sayfaSure) || 60); }
+
+function sayfaGoster(i) {
+  if (!acikSayfalar.length) return;
+  sayfaNo = ((i % acikSayfalar.length) + acikSayfalar.length) % acikSayfalar.length;
+  var acik = acikSayfalar[sayfaNo], j;
+  for (j = 0; j < SAYFALAR.length; j++) $(SAYFALAR[j].id).className = "sayfa" + (SAYFALAR[j].id === acik.id ? " acik" : "");
+  var sk = $("sekmeler").children;
+  for (j = 0; j < sk.length; j++) {
+    sk[j].className = "sekme" + (j === sayfaNo ? " on" : "");
+    var u = sk[j].getElementsByTagName("u")[0];
+    u.style.transition = "none"; u.style.webkitTransition = "none"; u.style.width = SABIT && j === sayfaNo ? "100%" : "0";
+    if (j === sayfaNo && !SABIT) { u.offsetWidth; u.style.transition = u.style.webkitTransition = "width " + sayfaSure() + "s linear"; u.style.width = "100%"; }
+  }
+  if (sayfaZaman) clearTimeout(sayfaZaman);
+  if (!SABIT && acikSayfalar.length > 1) sayfaZaman = setTimeout(function () { sayfaGoster(sayfaNo + 1); }, sayfaSure() * 1000);
+}
+/* Verisi olan sayfaları sekmelere dizer; sayfa listesi değişmediyse dönen sıraya dokunmaz. */
+function sayfalariKur() {
+  var l = SAYFALAR.filter(function (s) { return s.var_() && (!SABIT || s.kisa === SABIT); });
+  if (!l.length) l = [SAYFALAR[0]];
+  var imza = l.map(function (s) { return s.id + ":" + s.ad(); }).join("|") + "|" + sayfaSure();
+  if (imza === sekmeImza) return;
+  var eski = acikSayfalar[sayfaNo], yeniNo = 0;
+  acikSayfalar = l; sekmeImza = imza;
+  $("sekmeler").innerHTML = SABIT ? "" : l.map(function (s) { return '<div class="sekme">' + kac(s.ad()) + '<i><u></u></i></div>'; }).join("");
+  if (SABIT) $("sekmeler").innerHTML = '<div class="sekme">' + kac(l[0].ad()) + '<i><u></u></i></div>';
+  for (var i = 0; i < l.length; i++) if (eski && l[i].id === eski.id) yeniNo = i;
+  sayfaGoster(yeniNo);
 }
 
 function olcekle() {
@@ -457,11 +765,16 @@ function kodGonder() {
   return false;
 }
 
+function ciz(ad, f) { try { f(); } catch (e) { if (window.console) console.log("çizim hatası: " + ad + " · " + e); } }
 function uygula(v) {
   VERI = v; sonBasari = new Date().getTime();
   fark = zamanOku(v.simdi).getTime() - new Date().getTime();
   sakla("panelKod", KOD); perdeKapat();
-  saatCiz(); havaCiz(); hedefCiz(); takvimCiz(); rakamCiz(); brifCiz();
+  ciz("saat", saatCiz); ciz("hafta", takvimCiz); ciz("rakam", rakamCiz); ciz("hava", havaCiz); ciz("hedef", hedefCiz); ciz("brif", brifCiz);
+  if (v.ay && v.ay.gunler) ciz("ay", ayCiz);
+  if (v.ekip) ciz("ekip", ekipCiz);
+  if (v.motorlar) ciz("motor", motorCiz);
+  sayfalariKur();
   if (!fotoIstenen) fotoYukle();
   fotoDongu();
 }
@@ -469,7 +782,7 @@ function veriAl() {
   if (!KOD) return;
   iste("", function (v) {
     if (v && v.hata === "kod") { sakla("panelKod", null); KOD = ""; perde("TV kodu yanlış", "\"TV Panel\" tablosunun Ayarlar sayfasındaki kodu gir.", true); }
-    else if (v && v.hata === "kilit") perde("Çok fazla yanlış deneme", "10 dakika sonra yeniden dene.", !VERI);
+    else if (v && v.hata === "kilit") { if (!VERI) perde("Çok fazla yanlış deneme", "10 dakika sonra yeniden dene.", true); }   /* panel açıksa eldeki veriyle devam eder */
     else if (v && v.hata) { if (!VERI) perde("Sunucu hatası", String(v.ayrinti || v.hata), false); }
     else if (v && v.hafta) uygula(v);
   }, function () { if (!VERI) perde("Bağlanılamadı", "İnternet bağlantısını kontrol et. Panel kendiliğinden yeniden deneyecek.", false); });
@@ -481,13 +794,19 @@ function basla() {
   $("pForm").onsubmit = kodGonder;
   var h = String(window.location.hash || "").replace(/^#(kod=)?/, "");
   KOD = (h || oku("panelKod")).replace(/\s+/g, "").toLowerCase();
-  if (h) { try { window.history.replaceState(null, "", window.location.pathname); } catch (e) {} }
+  if (h) { try { window.history.replaceState(null, "", window.location.pathname + window.location.search); } catch (e) {} }
   if (!SUNUCU) perde("Kurulum eksik", "Sunucu adresi henüz girilmemiş (ayar.js).", false);
   else if (!KOD) perde("TV kodunu gir", "\"TV Panel\" tablosunun Ayarlar sayfasında yazıyor. Bir kez girmen yeterli.", true);
   else { perde("Bağlanıyor…", "Panel verisi alınıyor.", false); veriAl(); }
+  /* kumanda: sağ/sol tuş sayfa değiştirir */
+  document.addEventListener("keydown", function (e) {
+    if (!VERI || $("perde").style.display !== "none") return;
+    var k = e.keyCode || e.which;
+    if (k === 39) sayfaGoster(sayfaNo + 1); else if (k === 37) sayfaGoster(sayfaNo - 1);
+  });
   setInterval(function () { if (VERI) saatCiz(); }, 10000);
   setInterval(function () { if (VERI) odakIlerle(); }, 8000);
-  setInterval(function () { if (VERI) takvimCiz(); }, 60000);
+  setInterval(function () { if (VERI) ciz("hafta", takvimCiz); }, 60000);
   setInterval(veriAl, 5 * 60000);
   /* sayfanın yeni sürümünü almak için günde bir kez, gece yenile */
   setInterval(function () { if (new Date().getTime() - acilis > 20 * 3600000 && simdi().getHours() === 4) window.location.reload(); }, 30 * 60000);
