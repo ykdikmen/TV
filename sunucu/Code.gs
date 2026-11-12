@@ -6,6 +6,9 @@
  * Kurulum:  1) Bu dosyanın tamamını Code.gs'e yapıştır.
  *           2) Üstten "kurulum" fonksiyonunu seçip bir kez çalıştır, izinleri onayla.
  *           3) Dağıt › Yeni dağıtım › Web uygulaması (Farklı çalıştır: Ben · Erişim: Herkes).
+ *
+ * Güncelleme: 1) Bu dosyanın tamamını Code.gs'e yapıştır.  2) "kurulum"u bir kez daha çalıştır (tabloya eksik sayfaları ekler, TV kodunu değiştirmez).
+ *             3) Dağıt › Dağıtımları yönet › kalem › Sürüm: Yeni sürüm › Dağıt (adres aynı kalır).
  */
 var AYAR = {
   takvimAdi: "Tur Programi",   // turların durduğu Google Takvim
@@ -26,6 +29,8 @@ function kurulum() {
   var ss = null, id = pr.getProperty("tabloId");
   try { if (id) ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; }
   if (!ss) { ss = SpreadsheetApp.create(AYAR.tabloAdi); pr.setProperty("tabloId", ss.getId()); tabloHazirla_(ss); }
+  motorSayfasi_(ss);
+  sayfaSuresiSatiri_(ss);
 
   var kl = null, kid = pr.getProperty("klasorId");
   try { if (kid) kl = DriveApp.getFolderById(kid); } catch (e) { kl = null; }
@@ -35,11 +40,12 @@ function kurulum() {
     pr.setProperty("klasorId", kl.getId());
   }
 
-  CacheService.getScriptCache().removeAll(["veri", "ayar", "eski", "hava", "foto"]);
+  CacheService.getScriptCache().removeAll(["veri", "ayar", "eski", "eski2", "hava", "hava2", "foto"]);
   var a = ayarOku_(), v = veriKur_(a), n = 0;
   v.hafta.forEach(function (g) { n += g.turlar.length; });
   Logger.log("KURULUM TAMAM");
   Logger.log("TV kodu: " + a.kod);
+  Logger.log("Sürücü/rehber sayısı: " + v.ekip.liste.length + ". Motor sayısı: " + v.motorlar.length + (v.motorOrnek ? " (örnek satırlar)" : ""));
   Logger.log("Bu hafta takvimde " + n + " tur bulundu. Fotoğraf sayısı: " + v.fotoSayi + ". Hava: " + (v.hava ? v.hava.derece + "° " + v.hava.durum : "alınamadı"));
   Logger.log("Ayar tablosu: " + ss.getUrl());
   Logger.log("Fotoğraf klasörü: " + kl.getUrl());
@@ -67,8 +73,31 @@ function tabloHazirla_(ss) {
     ["Fotoğraf süresi (sn)", 45, "Arka plan kaç saniyede bir değişsin"],
     ["TV kodu", kod, "TV'de panel ilk açıldığında sorulan kod. Değiştirirsen TV'de yeniden girersin."]
   ]);
+  a.getRange(7, 1, 1, 3).setValues([["Sayfa süresi (sn)", 60, "Paneldeki sayfalar kaç saniyede bir değişsin"]]);
   a.getRange("A1:C1").setFontWeight("bold");
   a.setColumnWidth(1, 220); a.setColumnWidth(2, 160); a.setColumnWidth(3, 460); a.setFrozenRows(1);
+}
+
+/* Motorlar sayfası yoksa örnek satırlarla ekler; varsa dokunmaz. */
+function motorSayfasi_(ss) {
+  if (ss.getSheetByName("Motorlar")) return;
+  var m = ss.insertSheet("Motorlar"), y = new Date().getFullYear() + 1, ornek = "örnek satır, kendi motorunla değiştir";
+  m.getRange(1, 1, 4, 8).setValues([
+    ["Motor", "Plaka", "Durum", "Km", "Sigorta bitiş", "Muayene (revizyon)", "Son bakım", "Not"],
+    ["Vespa 1 · Primavera 125", "AB 12345", "Hazır", 12400, new Date(y, 2, 15), new Date(y, 5, 30), new Date(y - 1, 9, 20), ornek],
+    ["Vespa 2 · Primavera 125", "AB 12346", "Bakımda", 18950, new Date(y, 2, 15), new Date(y - 1, 11, 5), new Date(y - 1, 10, 2), ornek],
+    ["Fiat 500 cabrio", "RM 500AB", "Hazır", 64200, new Date(y, 0, 10), new Date(y, 8, 1), new Date(y - 1, 8, 12), ornek]
+  ]);
+  m.getRange("A1:H1").setFontWeight("bold");
+  m.getRange("E2:G200").setNumberFormat("dd.MM.yyyy");
+  m.setColumnWidth(1, 240); m.setColumnWidth(8, 320); m.setFrozenRows(1);
+}
+/* Ayarlar sayfasında "Sayfa süresi" satırı yoksa en alta ekler. */
+function sayfaSuresiSatiri_(ss) {
+  var a = ss.getSheetByName("Ayarlar");
+  if (!a) return;
+  var var_ = a.getDataRange().getValues().some(function (r) { return sade_(r[0]).indexOf("sayfa") === 0; });
+  if (!var_) a.appendRow(["Sayfa süresi (sn)", 60, "Paneldeki sayfalar kaç saniyede bir değişsin"]);
 }
 
 /* ------------------------------------------------------------------ web uç noktası */
@@ -81,7 +110,7 @@ function doGet(e) {
     if (yanlis >= 30) out = { hata: "kilit" };
     else if (!p.k || !ayar.kod || String(p.k).trim().toLowerCase() !== String(ayar.kod).trim().toLowerCase()) { c.put("yanlis", String(yanlis + 1), 600); out = { hata: "kod" }; }
     else if (p.islem === "foto") out = fotoVer_(+p.no || 0);
-    else out = veriKur_(ayar);
+    else { out = veriKur_(ayar); out.simdi = Utilities.formatDate(new Date(), AYAR.tz, "yyyy-MM-dd'T'HH:mm:ss"); }  /* veri önbellekten gelse de saat taze olsun */
   } catch (err) { out = { hata: "sunucu", ayrinti: String((err && err.message) || err) }; }
   var js = JSON.stringify(out);
   return cb
@@ -105,7 +134,7 @@ function sade_(s) {
 function ayarOku_() {
   var c = CacheService.getScriptCache(), h = c.get("ayar");
   if (h) return JSON.parse(h);
-  var a = { isim: "", hedefHafta: 0, hedefAy: 0, fotoSure: 45, kod: "", hedefler: [], hedefOrnek: false };
+  var a = { isim: "", hedefHafta: 0, hedefAy: 0, fotoSure: 45, sayfaSure: 60, kod: "", hedefler: [], hedefOrnek: false, motorlar: [], motorOrnek: false };
   var id = PropertiesService.getScriptProperties().getProperty("tabloId");
   if (!id) throw new Error("Önce kurulum fonksiyonunu çalıştır.");
   var ss = SpreadsheetApp.openById(id);
@@ -116,6 +145,7 @@ function ayarOku_() {
     else if (k.indexOf("haftalik") === 0) a.hedefHafta = sayi_(v);
     else if (k.indexOf("aylik") === 0) a.hedefAy = sayi_(v);
     else if (k.indexOf("fotograf") === 0) a.fotoSure = Math.max(10, sayi_(v) || 45);
+    else if (k.indexOf("sayfa") === 0) a.sayfaSure = Math.max(15, sayi_(v) || 60);
     else if (k.indexOf("tv kodu") === 0) a.kod = String(v || "").trim();
   });
   var hs = ss.getSheetByName("Hedefler");
@@ -128,8 +158,23 @@ function ayarOku_() {
     if (/örnek/i.test(not)) a.hedefOrnek = true;
     a.hedefler.push({ ad: ad, durum: String(r[1] === 0 ? "0" : r[1] || "").trim(), oran: Math.round(o), alt: /örnek/i.test(not) ? "" : not });
   });
-  c.put("ayar", JSON.stringify(a), 300);
+  var ms = ss.getSheetByName("Motorlar"), tz = ss.getSpreadsheetTimeZone() || AYAR.tz;
+  if (ms) ms.getDataRange().getValues().slice(1).forEach(function (r) {
+    var ad = String(r[0] || "").trim();
+    if (!ad || a.motorlar.length >= 24) return;
+    var not = String(r[7] || "").trim(), ornek = /örnek/i.test(not);
+    if (ornek) a.motorOrnek = true;
+    a.motorlar.push({ ad: ad, plaka: String(r[1] || "").trim(), durum: String(r[2] || "").trim(), km: r[3] === "" || r[3] == null ? "" : Math.round(sayi_(r[3])),
+      sigorta: tarihYaz_(r[4], tz), muayene: tarihYaz_(r[5], tz), bakim: tarihYaz_(r[6], tz), not: ornek ? "" : not });
+  });
+  try { c.put("ayar", JSON.stringify(a), 300); } catch (e) {}
   return a;
+}
+/* Tablodaki tarih hücresi → 'yyyy-MM-dd'. Tarih değilse (ör. "bilinmiyor") yazıyı olduğu gibi verir. */
+function tarihYaz_(x, tz) {
+  if (Object.prototype.toString.call(x) === "[object Date]") return isNaN(x.getTime()) ? "" : Utilities.formatDate(x, tz, "yyyy-MM-dd");
+  var s = String(x == null ? "" : x).trim(), m = s.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);
+  return m ? m[3] + "-" + p2_(+m[2]) + "-" + p2_(+m[1]) : s;
 }
 
 /* ------------------------------------------------------------------ takvim */
@@ -185,14 +230,14 @@ function havaIkon_(kod, gunduz) {
 }
 
 function havaAl_(ileri, bugun, saat) {
-  var c = CacheService.getScriptCache(), ham = c.get("hava"), w;
+  var c = CacheService.getScriptCache(), ham = c.get("hava2"), w;
   try {
     if (!ham) {
       ham = UrlFetchApp.fetch("https://api.open-meteo.com/v1/forecast?latitude=" + AYAR.enlem + "&longitude=" + AYAR.boylam +
-        "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&hourly=temperature_2m,weather_code,precipitation_probability,is_day" +
-        "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=" + encodeURIComponent(AYAR.tz) + "&forecast_days=5", { muteHttpExceptions: true }).getContentText();
+        "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,is_day,relative_humidity_2m&hourly=temperature_2m,weather_code,precipitation_probability,is_day" +
+        "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&timezone=" + encodeURIComponent(AYAR.tz) + "&forecast_days=7", { muteHttpExceptions: true }).getContentText();
       JSON.parse(ham).current.temperature_2m.toFixed(0);
-      c.put("hava", ham, 1200);
+      c.put("hava2", ham, 1200);
     }
     w = JSON.parse(ham);
   } catch (e) { return null; }
@@ -201,10 +246,12 @@ function havaAl_(ileri, bugun, saat) {
   var KISA = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"];
   var h = {
     sehir: AYAR.sehir, derece: Math.round(C.temperature_2m), hissedilen: Math.round(C.apparent_temperature), ruzgar: Math.round(C.wind_speed_10m),
-    durum: HAVA_KOD[C.weather_code] || "", ikon: havaIkon_(C.weather_code, C.is_day), yagmur: H.precipitation_probability[i0] || 0, saatlik: [], gunler: []
+    durum: HAVA_KOD[C.weather_code] || "", ikon: havaIkon_(C.weather_code, C.is_day), yagmur: H.precipitation_probability[i0] || 0, saatlik: [], gunler: [],
+    nem: Math.round(C.relative_humidity_2m || 0), en: Math.round(D.temperature_2m_max[0]), min: Math.round(D.temperature_2m_min[0]),
+    yagmurGun: D.precipitation_probability_max[0] || 0, dogus: String((D.sunrise || [""])[0]).slice(11, 16), batis: String((D.sunset || [""])[0]).slice(11, 16)
   };
-  for (var i = i0 + 1; i <= i0 + 5 && i < H.time.length; i++) h.saatlik.push({ s: H.time[i].slice(11, 13), d: Math.round(H.temperature_2m[i]), i: havaIkon_(H.weather_code[i], H.is_day[i]), y: H.precipitation_probability[i] || 0 });
-  for (var j = 1; j < D.time.length && h.gunler.length < 4; j++) h.gunler.push({ g: KISA[pTarih_(D.time[j]).getUTCDay()], i: havaIkon_(D.weather_code[j], 1), y: D.precipitation_probability_max[j] || 0, en: Math.round(D.temperature_2m_max[j]), min: Math.round(D.temperature_2m_min[j]) });
+  for (var i = i0 + 1; i <= i0 + 12 && i < H.time.length; i++) h.saatlik.push({ s: H.time[i].slice(11, 13), d: Math.round(H.temperature_2m[i]), i: havaIkon_(H.weather_code[i], H.is_day[i]), y: H.precipitation_probability[i] || 0 });
+  for (var j = 1; j < D.time.length && h.gunler.length < 6; j++) h.gunler.push({ g: KISA[pTarih_(D.time[j]).getUTCDay()], i: havaIkon_(D.weather_code[j], 1), y: D.precipitation_probability_max[j] || 0, en: Math.round(D.temperature_2m_max[j]), min: Math.round(D.temperature_2m_min[j]) });
 
   /* turlarla ilgili kısa not */
   var simdiDk = pDk_(saat), kalan = ileri.filter(function (r) { return r.tarih === bugun && pDk_(r.saat) > simdiDk; }), not = "";
@@ -236,13 +283,13 @@ function veriKur_(ayar) {
   var son = pGunEkle_(bugun, 14); if (aySon > son) son = aySon;
 
   /* bu haftadan öncesi sadece toplamlar için gerekir: sade tutulur ve 1 saat saklanır */
-  var eski, eh = c.get("eski");
+  var eski, eh = c.get("eski2");
   if (eh) { eh = JSON.parse(eh); if (eh.bas === oncBas && eh.bit === pzt) eski = eh.s; }
   if (!eski) {
-    eski = takvimOku_(zaman_(oncBas), zaman_(pzt)).filter(function (r) { return r.durum !== "iptal"; }).map(function (r) { return [r.tarih, Math.round(r.net * 100) / 100, r.kisi]; });
-    try { c.put("eski", JSON.stringify({ bas: oncBas, bit: pzt, s: eski }), 3600); } catch (e) {}
+    eski = takvimOku_(zaman_(oncBas), zaman_(pzt)).filter(function (r) { return r.durum !== "iptal"; }).map(function (r) { return [r.tarih, Math.round(r.net * 100) / 100, r.kisi, r.rehber, r.suruculer, pPlatform_(r.platform)]; });
+    try { c.put("eski2", JSON.stringify({ bas: oncBas, bit: pzt, s: eski }), 3600); } catch (e) {}
   }
-  var satirlar = eski.map(function (x) { return { tarih: x[0], saat: "", net: x[1], kisi: x[2], durum: "aktif" }; });
+  var satirlar = eski.map(function (x) { return { tarih: x[0], saat: "", net: x[1], kisi: x[2], durum: "aktif", rehber: x[3] || "", suruculer: x[4] || "", platform: x[5] || "" }; });
   var yeni = takvimOku_(zaman_(pzt), zaman_(pGunEkle_(son, 1)));
   satirlar = satirlar.concat(yeni);
 
@@ -250,7 +297,8 @@ function veriKur_(ayar) {
   var v = panelVerisiKur(satirlar, bugun, saat, ayar, hava);
   v.hafta.forEach(function (g) { if (g.tarih !== bugun) g.turlar.forEach(function (t) { t.musteri = ""; }); });
   v.simdi = bugun + "T" + saat + ":" + Utilities.formatDate(simdi, AYAR.tz, "ss");
-  v.fotoSayi = fotoListe_().length; v.fotoSure = ayar.fotoSure;
+  v.fotoSayi = fotoListe_().length; v.fotoSure = ayar.fotoSure; v.sayfaSure = ayar.sayfaSure;
+  v.motorlar = ayar.motorlar || []; v.motorOrnek = !!ayar.motorOrnek;
   try { c.put("veri", JSON.stringify(v), 240); } catch (e) {}
   return v;
 }
@@ -303,6 +351,13 @@ function pGunEkle_(s, n) { var d = pTarih_(s); d.setUTCDate(d.getUTCDate() + n);
 function pPara_(n) { var s = String(Math.round(n)), c = ""; while (s.length > 3) { c = "." + s.slice(-3) + c; s = s.slice(0, -3); } return "€" + s + c; }
 function pDk_(saat) { var p = String(saat || "00:00").split(":"); return +p[0] * 60 + +p[1]; }
 
+function pPlatform_(p) { p = String(p || ""); return /get|gyg/i.test(p) ? "gyg" : /viator|^via$/i.test(p) ? "viator" : "direkt"; }
+/* "Ali, Mehmet ve Luca" → ["Ali", "Mehmet", "Luca"] */
+function pKisiler_(s) {
+  return String(s || "").split(/\s*[,;\/&+]\s*|\s+(?:ve|and|e)\s+/).map(function (x) { return x.replace(/\s+/g, " ").trim(); })
+    .filter(function (x) { return x && !/^[-–—?.]+$/.test(x) && !/^(yok|none|tbd|belli de[gğ]il|atanmad[ıi])$/i.test(x); });
+}
+
 function pUrunKisa_(t) {
   t = String(t || "");
   if (/fiat/i.test(t)) return "Fiat 500";
@@ -354,7 +409,7 @@ function panelVerisiKur(satirlar, bugun, saat, ayar, hava) {
     hafta.push({ tarih: t, turlar: aralik(t, t).map(function (r) {
       var ekip = [r.rehber, r.suruculer].filter(function (x) { return x && String(x).trim(); }).join(" · ");
       var ileride = r.tarih > bugun || (r.tarih === bugun && pDk_(r.saat) > simdiDk);
-      return { saat: r.saat || "--:--", kisi: +r.kisi || 0, platform: /get|gyg/i.test(r.platform) ? "gyg" : /viator|^via$/i.test(r.platform) ? "viator" : "direkt", urun: pUrunKisa_(r.tur), musteri: String(r.musteri || ""), etiket: pEtiketler_(r), ekip: ekip, atanmadi: ileride && !ekip && r.rehber !== undefined };
+      return { saat: r.saat || "--:--", kisi: +r.kisi || 0, platform: pPlatform_(r.platform), urun: pUrunKisa_(r.tur), musteri: String(r.musteri || ""), etiket: pEtiketler_(r), ekip: ekip, atanmadi: ileride && !ekip && r.rehber !== undefined };
     }) });
   }
 
@@ -371,6 +426,36 @@ function panelVerisiKur(satirlar, bugun, saat, ayar, hava) {
     { ad: "Bu hafta", net: hf.net, tur: hf.tur, kisi: hf.kisi, kiyasAd: ayar.hedefHafta ? "Hedef" : "Geçen hafta", kiyas: ayar.hedefHafta || gh.net, alt: "Yapılan " + pPara_(hfYap.net) + " · kalan rezerve " + pPara_(hf.net - hfYap.net) },
     { ad: ayAd, net: ay.net, tur: ay.tur, kisi: ay.kisi, kiyasAd: ayar.hedefAy ? "Hedef" : oncAd, kiyas: ayar.hedefAy || oa.net, alt: "Yapılan " + pPara_(ayYap.net) + " · kalan rezerve " + pPara_(ay.net - ayYap.net) }
   ];
+
+  /* ay takvimi: ayın her günü için tur ve kişi sayısı */
+  var ayGun = [];
+  for (var tg = ayBas; tg <= aySon; tg = pGunEkle_(tg, 1)) {
+    var gl = aralik(tg, tg), go = { t: tg, n: gl.length, k: 0, e: 0, v: 0, g: 0, d: 0 };
+    gl.forEach(function (r) { go.k += +r.kisi || 0; go.e += +r.net || 0; var p = pPlatform_(r.platform); go[p === "gyg" ? "g" : p === "viator" ? "v" : "d"]++; });
+    go.e = Math.round(go.e);
+    ayGun.push(go);
+  }
+
+  /* ekip: sürücü ve rehberlerin kaç tura çıktığı */
+  var kisiler = {}, sira = [], ekipsiz = 0;
+  aktif.forEach(function (r) {
+    var buAy = r.tarih >= ayBas && r.tarih <= aySon, onc = r.tarih >= oncBas && r.tarih <= oncSon, hft = r.tarih >= pzt && r.tarih <= paz;
+    if (!buAy && !onc && !hft) return;
+    var gecti = r.tarih < bugun || (r.tarih === bugun && pDk_(r.saat) <= simdiDk);
+    var reh = pKisiler_(r.rehber), sur = pKisiler_(r.suruculer), gorulen = {};
+    if (buAy && !gecti && !reh.length && !sur.length) ekipsiz++;
+    reh.map(function (ad) { return [ad, 1]; }).concat(sur.map(function (ad) { return [ad, 0]; })).forEach(function (x) {
+      var k = x[0].toLowerCase(), o = kisiler[k];
+      if (!o) { o = kisiler[k] = { ad: x[0], hafta: 0, ay: 0, yap: 0, onceki: 0, rehber: 0, surucu: 0, kisi: 0 }; sira.push(o); }
+      if (buAy) { if (x[1]) o.rehber++; else o.surucu++; }
+      if (gorulen[k]) return;   /* aynı turda hem rehber hem sürücü yazılmışsa tur bir kez sayılır */
+      gorulen[k] = 1;
+      if (hft) o.hafta++;
+      if (onc) o.onceki++;
+      if (buAy) { o.ay++; o.kisi += +r.kisi || 0; if (gecti) o.yap++; }
+    });
+  });
+  sira.sort(function (a, b) { return b.ay - a.ay || b.onceki - a.onceki || (a.ad < b.ad ? -1 : 1); });
 
   /* özet cümleleri */
   var c = [], bugunTur = hafta[(hg + 6) % 7].turlar;
@@ -409,6 +494,8 @@ function panelVerisiKur(satirlar, bugun, saat, ayar, hava) {
     isim: ayar.isim || "", bugun: bugun, guncel: saat,
     hava: hava || null, hedefler: ayar.hedefler || [], hedefOrnek: !!ayar.hedefOrnek,
     hafta: hafta, rakamlar: rakamlar,
+    ay: { ad: ayAd, yil: d.getUTCFullYear(), gunler: ayGun },
+    ekip: { ay: ayAd, onceki: oncAd, ekipsiz: ekipsiz, liste: sira.slice(0, 14) },
     brif: { kim: claude ? "Claude" : "Günün özeti", alt: claude ? "Bugün " + (ayar.brifSaat || "") + "'de hazırlandı" : "Tur takviminden otomatik · " + saat, claude: !!claude, cumleler: claude ? ayar.brif : c }
   };
 }
